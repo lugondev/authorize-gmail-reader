@@ -87,8 +87,8 @@ export default function PrivacyPolicyPage() {
             <h2 className="text-2xl font-semibold text-gray-900 mb-3">Contact Us</h2>
             <p>
               If you have any questions about this Privacy Policy, please contact us at:{' '}
-              <a href="mailto:support@example.com" className="text-blue-600 hover:underline">
-                support@example.com
+              <a href="mailto:support@codezui.com" className="text-blue-600 hover:underline">
+                support@codezui.com
               </a>
             </p>
           </section>

@@ -4,14 +4,21 @@ export class GmailClient {
   private oauth2Client;
 
   constructor() {
+    // Get redirect URI from environment or construct from base URL
+    const redirectUri = process.env.GOOGLE_REDIRECT_URI || 
+      `${process.env.NEXTAUTH_URL || process.env.NEXT_PUBLIC_APP_URL}/api/auth/callback`;
+
     this.oauth2Client = new google.auth.OAuth2(
       process.env.GOOGLE_CLIENT_ID,
       process.env.GOOGLE_CLIENT_SECRET,
-      process.env.GOOGLE_REDIRECT_URI
+      redirectUri
     );
   }
 
   getAuthUrl(): string {
+    const redirectUri = process.env.GOOGLE_REDIRECT_URI || 
+      `${process.env.NEXTAUTH_URL || process.env.NEXT_PUBLIC_APP_URL}/api/auth/callback`;
+
     return this.oauth2Client.generateAuthUrl({
       access_type: 'offline',
       scope: [
@@ -20,6 +27,7 @@ export class GmailClient {
         'https://www.googleapis.com/auth/userinfo.email',
       ],
       prompt: 'consent',
+      redirect_uri: redirectUri, // Explicitly set redirect_uri
     });
   }
 
