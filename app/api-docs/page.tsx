@@ -8,7 +8,7 @@ import './swagger-custom.css';
 const SwaggerUI = dynamic(() => import('swagger-ui-react'), { ssr: false });
 
 export default function ApiDocsPage() {
-  const [spec, setSpec] = useState(null);
+  const [spec, setSpec] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -50,17 +50,19 @@ export default function ApiDocsPage() {
   return (
     <div className="min-h-screen bg-white">
       <div className="container mx-auto">
-        <SwaggerUI 
-          spec={spec}
-          docExpansion="list"
-          defaultModelsExpandDepth={3}
-          defaultModelExpandDepth={3}
-          displayRequestDuration={true}
-          filter={true}
-          showExtensions={true}
-          showCommonExtensions={true}
-          tryItOutEnabled={true}
-        />
+        {spec && (
+          <SwaggerUI 
+            spec={spec}
+            docExpansion="list"
+            defaultModelsExpandDepth={3}
+            defaultModelExpandDepth={3}
+            displayRequestDuration={true}
+            filter={true}
+            showExtensions={true}
+            showCommonExtensions={true}
+            tryItOutEnabled={true}
+          />
+        )}
       </div>
     </div>
   );
