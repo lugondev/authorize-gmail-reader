@@ -42,8 +42,12 @@ This API uses Gmail API quota. Please refer to [Google's Gmail API Usage Limits]
     },
     servers: [
       {
+        url: 'https://gmail.codezui.com',
+        description: 'Production Server',
+      },
+      {
         url: process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3333',
-        description: 'API Server',
+        description: 'Development Server',
       },
     ],
     tags: [
