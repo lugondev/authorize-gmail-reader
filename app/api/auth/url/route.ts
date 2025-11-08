@@ -1,6 +1,33 @@
 import { NextResponse } from 'next/server';
 import { GmailClient } from '@/lib/gmail_client';
 
+/**
+ * @swagger
+ * /api/auth/url:
+ *   get:
+ *     summary: Get OAuth2 authorization URL
+ *     description: Returns the Google OAuth2 authorization URL for initiating the authentication flow
+ *     tags:
+ *       - Authentication
+ *     responses:
+ *       200:
+ *         description: Authorization URL generated successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 authUrl:
+ *                   type: string
+ *                   description: Google OAuth2 authorization URL
+ *                   example: https://accounts.google.com/o/oauth2/v2/auth?client_id=...
+ *       500:
+ *         description: Failed to generate authorization URL
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ */
 export async function GET() {
   try {
     // Log environment configuration (without sensitive data)

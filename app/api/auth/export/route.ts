@@ -5,8 +5,21 @@ import { cookies } from 'next/headers';
  * @swagger
  * /api/auth/export:
  *   get:
- *     summary: Export authentication data
- *     description: Returns the current authentication tokens for external API usage
+ *     summary: Export authentication tokens
+ *     description: |
+ *       Returns the current OAuth2 authentication tokens for external API usage.
+ *       
+ *       **Important:** You must be authenticated via the web interface first.
+ *       
+ *       ### Usage:
+ *       1. Login via web interface at `/`
+ *       2. Call this endpoint to retrieve your access token
+ *       3. Use the `access_token` in the Authorization header for API requests
+ *       
+ *       ### Example:
+ *       ```
+ *       Authorization: Bearer ya29.a0AfB_byC...
+ *       ```
  *     tags:
  *       - Authentication
  *     responses:
@@ -19,21 +32,39 @@ import { cookies } from 'next/headers';
  *               properties:
  *                 success:
  *                   type: boolean
+ *                   example: true
  *                 data:
+ *                   $ref: '#/components/schemas/AuthTokens'
+ *                 usage:
  *                   type: object
  *                   properties:
- *                     access_token:
+ *                     description:
  *                       type: string
- *                     refresh_token:
- *                       type: string
- *                     scope:
- *                       type: string
- *                     token_type:
- *                       type: string
- *                     expiry_date:
- *                       type: number
+ *                       example: Use this authentication data to make API requests
+ *                     example:
+ *                       type: object
+ *                       properties:
+ *                         headers:
+ *                           type: object
+ *                           properties:
+ *                             Authorization:
+ *                               type: string
+ *                               example: Bearer ya29.a0AfB_byC...
  *       401:
  *         description: Not authenticated
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *             example:
+ *               success: false
+ *               error: Not authenticated. Please login first.
+ *       500:
+ *         description: Server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
  */
 export async function GET(request: NextRequest) {
   try {

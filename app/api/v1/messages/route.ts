@@ -5,8 +5,24 @@ import { google } from 'googleapis';
  * @swagger
  * /api/v1/messages:
  *   get:
- *     summary: Get list of Gmail messages
- *     description: Fetch a list of Gmail messages using Bearer token authentication
+ *     summary: List Gmail messages
+ *     description: |
+ *       Retrieves a list of Gmail messages from the authenticated user's mailbox.
+ *       
+ *       ### Authentication Required:
+ *       - Include your OAuth2 access token in the Authorization header
+ *       - Token can be obtained from `/api/auth/export` endpoint
+ *       
+ *       ### Features:
+ *       - Returns message metadata including sender, subject, and preview
+ *       - Configurable result limit (1-100 messages)
+ *       - Sorted by most recent first
+ *       
+ *       ### Example Request:
+ *       ```bash
+ *       curl -X GET "http://localhost:3333/api/v1/messages?maxResults=20" \
+ *         -H "Authorization: Bearer ya29.a0AfB_byC..."
+ *       ```
  *     tags:
  *       - Messages
  *     security:
@@ -20,6 +36,7 @@ import { google } from 'googleapis';
  *           minimum: 1
  *           maximum: 100
  *         description: Maximum number of messages to return
+ *         example: 20
  *     responses:
  *       200:
  *         description: List of messages retrieved successfully
@@ -30,38 +47,22 @@ import { google } from 'googleapis';
  *               properties:
  *                 success:
  *                   type: boolean
+ *                   example: true
  *                 data:
  *                   type: object
  *                   properties:
  *                     messages:
  *                       type: array
  *                       items:
- *                         type: object
- *                         properties:
- *                           id:
- *                             type: string
- *                           threadId:
- *                             type: string
- *                           labelIds:
- *                             type: array
- *                             items:
- *                               type: string
- *                           snippet:
- *                             type: string
- *                           internalDate:
- *                             type: string
- *                           from:
- *                             type: string
- *                           to:
- *                             type: string
- *                           subject:
- *                             type: string
+ *                         $ref: '#/components/schemas/MessageSummary'
  *                     total:
  *                       type: integer
+ *                       description: Total number of messages returned
+ *                       example: 20
  *       401:
- *         description: Unauthorized - Invalid or missing token
+ *         $ref: '#/components/responses/UnauthorizedError'
  *       500:
- *         description: Internal server error
+ *         $ref: '#/components/responses/ServerError'
  */
 export async function GET(request: NextRequest) {
   try {

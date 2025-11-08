@@ -1,6 +1,32 @@
 import { NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
 
+/**
+ * @swagger
+ * /api/auth/status:
+ *   get:
+ *     summary: Check authentication status
+ *     description: Returns whether the user is currently authenticated and their email address
+ *     tags:
+ *       - Authentication
+ *     responses:
+ *       200:
+ *         description: Authentication status retrieved
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 authenticated:
+ *                   type: boolean
+ *                   description: Whether user is authenticated
+ *                   example: true
+ *                 email:
+ *                   type: string
+ *                   nullable: true
+ *                   description: User's email address if authenticated
+ *                   example: user@gmail.com
+ */
 export async function GET() {
   try {
     const cookieStore = await cookies();

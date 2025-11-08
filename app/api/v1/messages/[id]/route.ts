@@ -5,8 +5,23 @@ import { google } from 'googleapis';
  * @swagger
  * /api/v1/messages/{id}:
  *   get:
- *     summary: Get detailed Gmail message
- *     description: Fetch detailed information about a specific Gmail message using Bearer token authentication
+ *     summary: Get message details
+ *     description: |
+ *       Retrieves detailed information about a specific Gmail message including full email body.
+ *       
+ *       ### Authentication Required:
+ *       - Include your OAuth2 access token in the Authorization header
+ *       
+ *       ### Returns:
+ *       - Complete message metadata (sender, recipient, subject, date)
+ *       - Full email body in both HTML and plain text formats (when available)
+ *       - Message labels and thread information
+ *       
+ *       ### Example Request:
+ *       ```bash
+ *       curl -X GET "http://localhost:3333/api/v1/messages/18c1234567890abcd" \
+ *         -H "Authorization: Bearer ya29.a0AfB_byC..."
+ *       ```
  *     tags:
  *       - Messages
  *     security:
@@ -17,7 +32,8 @@ import { google } from 'googleapis';
  *         required: true
  *         schema:
  *           type: string
- *         description: The message ID
+ *         description: The unique Gmail message ID
+ *         example: 18c1234567890abcd
  *     responses:
  *       200:
  *         description: Message details retrieved successfully
@@ -28,37 +44,15 @@ import { google } from 'googleapis';
  *               properties:
  *                 success:
  *                   type: boolean
+ *                   example: true
  *                 data:
- *                   type: object
- *                   properties:
- *                     id:
- *                       type: string
- *                     threadId:
- *                       type: string
- *                     labelIds:
- *                       type: array
- *                       items:
- *                         type: string
- *                     snippet:
- *                       type: string
- *                     internalDate:
- *                       type: string
- *                     from:
- *                       type: string
- *                     to:
- *                       type: string
- *                     subject:
- *                       type: string
- *                     bodyHtml:
- *                       type: string
- *                     bodyText:
- *                       type: string
+ *                   $ref: '#/components/schemas/MessageDetail'
  *       401:
- *         description: Unauthorized - Invalid or missing token
+ *         $ref: '#/components/responses/UnauthorizedError'
  *       404:
- *         description: Message not found
+ *         $ref: '#/components/responses/NotFoundError'
  *       500:
- *         description: Internal server error
+ *         $ref: '#/components/responses/ServerError'
  */
 export async function GET(
   request: NextRequest,
